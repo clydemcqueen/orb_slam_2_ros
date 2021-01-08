@@ -35,6 +35,7 @@ Node::Node(
   initialized_(false),
   min_observations_per_point_(2)
 {
+  declare_parameter("subscribe_best_effort", rclcpp::ParameterValue(false));
   declare_parameter("publish_pointcloud", rclcpp::ParameterValue(true));
   declare_parameter("publish_pose", rclcpp::ParameterValue(true));
   declare_parameter("publish_tf", rclcpp::ParameterValue(true));
@@ -59,6 +60,7 @@ Node::Node(
 
 void Node::init(const ORB_SLAM2::System::eSensor & sensor)
 {
+  get_parameter("subscribe_best_effort", subscribe_best_effort_param_);
   get_parameter("publish_pointcloud", publish_pointcloud_param_);
   get_parameter("publish_pose", publish_pose_param_);
   get_parameter("publish_tf", publish_tf_param_);
@@ -91,8 +93,15 @@ void Node::init(const ORB_SLAM2::System::eSensor & sensor)
     pose_publisher_ = create_publisher<geometry_msgs::msg::PoseStamped>(node_name_ + "/pose", 1);
   }
 
+  rclcpp::QoS camera_info_qos(1);
+  if (subscribe_best_effort_param_) {
+    camera_info_qos.best_effort();
+  } else {
+    camera_info_qos.reliable();
+  }
+
   camera_info_sub_ = create_subscription<sensor_msgs::msg::CameraInfo>(
-      "/camera/camera_info", 1, std::bind(&Node::cameraInfoCallback, this, std::placeholders::_1));
+      "/camera/camera_info", camera_info_qos, std::bind(&Node::cameraInfoCallback, this, std::placeholders::_1));
 
   service_server_ = create_service<orb_slam2_ros::srv::SaveMap>(
       node_name_ + "/save_map",

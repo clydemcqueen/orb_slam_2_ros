@@ -51,10 +51,14 @@ void StereoNode::init()
 {
   Node::init(ORB_SLAM2::System::STEREO);
 
+  auto image_qos = subscribe_best_effort_param_ ?
+                 rmw_qos_profile_sensor_data :
+                 rmw_qos_profile_services_default;
+
   left_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(
-    shared_from_this(), "/image_left/image_color_rect");
+    shared_from_this(), "/image_left/image_color_rect", image_qos);
   right_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(
-    shared_from_this(), "/image_right/image_color_rect");
+    shared_from_this(), "/image_right/image_color_rect", image_qos);
 
   sync_ = new message_filters::Synchronizer<sync_pol>(sync_pol(10), *left_sub_, *right_sub_);
   sync_->registerCallback(std::bind(&StereoNode::ImageCallback, this,
