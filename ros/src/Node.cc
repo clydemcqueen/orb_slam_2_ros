@@ -261,12 +261,19 @@ sensor_msgs::msg::PointCloud2 Node::MapPointsToPointCloud(
   float * data_array = new float[num_channels];
   for (unsigned int i = 0; i < cloud.width; i++) {
     if (map_points.at(i)->nObs >= min_observations_per_point_) {
+#define DOWN_FACING_CAMERA
+#ifdef DOWN_FACING_CAMERA
+      data_array[0] = -1.0 * map_points.at(i)->GetWorldPos().at<float>(1);
+      data_array[1] = -1.0 * map_points.at(i)->GetWorldPos().at<float>(0);
+      data_array[2] = -1.0 * map_points.at(i)->GetWorldPos().at<float>(2);
+#else
       // x. Do the transformation by just reading at the position of z instead of x
       data_array[0] = map_points.at(i)->GetWorldPos().at<float>(2);
       // y. Do the transformation by just reading at the position of x instead of y
       data_array[1] = -1.0 * map_points.at(i)->GetWorldPos().at<float>(0);
       // z. Do the transformation by just reading at the position of y instead of z
       data_array[2] = -1.0 * map_points.at(i)->GetWorldPos().at<float>(1);
+#endif
 
       // TODO(tbd): dont hack the transformation but have a central conversion
       //  function for MapPointsToPointCloud and TransformFromMat
