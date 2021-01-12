@@ -75,10 +75,10 @@ void Node::init(const ORB_SLAM2::System::eSensor & sensor)
   image_transport_ = std::make_shared<image_transport::ImageTransport>(shared_from_this());
 
   tf_buffer_ = std::make_shared<tf2_ros::Buffer>(get_clock());
-  auto timer_interface = std::make_shared<tf2_ros::CreateTimerROS>(
-    get_node_base_interface(),
-    get_node_timers_interface());
-  tf_buffer_->setCreateTimerInterface(timer_interface);
+  // auto timer_interface = std::make_shared<tf2_ros::CreateTimerROS>(
+  //   get_node_base_interface(),
+  //   get_node_timers_interface());
+  // tf_buffer_->setCreateTimerInterface(timer_interface);
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
   tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(shared_from_this());
 
@@ -131,7 +131,9 @@ void Node::Update()
   cv::Mat position = orb_slam_->GetCurrentPosition();
 
   if (!position.empty()) {
-    PublishPositionAsTransform(position);
+    if (publish_tf_param_) {
+      PublishPositionAsTransform(position);
+    }
     if (publish_pose_param_) {
       PublishPositionAsPoseStamped(position);
     }
