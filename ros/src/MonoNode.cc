@@ -48,15 +48,25 @@ void MonoNode::init()
 {
   Node::init(ORB_SLAM2::System::MONOCULAR);
 
-  image_subscriber_ = image_transport_->subscribe(
-    "/camera/image_raw", 1, &MonoNode::ImageCallback, this);
+  rclcpp::QoS qos(1);
+  if (subscribe_best_effort_param_) {
+    qos.best_effort();
+  } else {
+    qos.reliable();
+  }
+
+  // image_subscriber_ = image_transport_->subscribe(
+  //   "/camera/image_raw", 1, &MonoNode::ImageCallback, this);
+  image_subscriber_ = create_subscription<sensor_msgs::msg::Image>("/camera/image_raw", qos,
+    std::bind(&MonoNode::ImageCallback, this, std::placeholders::_1));
 }
 
 MonoNode::~MonoNode()
 {
 }
 
-void MonoNode::ImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & msg)
+// void MonoNode::ImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & msg)
+void MonoNode::ImageCallback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
   if (!isInitialized()) {
     RCLCPP_WARN(get_logger(), "Camera info not received, node has not been initialized!");

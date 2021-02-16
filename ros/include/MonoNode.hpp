@@ -51,10 +51,14 @@ public:
 
   void init();
 
-  void ImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & msg);
+  // void ImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & msg);
+  void ImageCallback(const sensor_msgs::msg::Image::SharedPtr msg);
 
 private:
-  image_transport::Subscriber image_subscriber_;
+  // image_transport doesn't support arbitrary QoS
+  // See https://github.com/ros-perception/image_common/issues/156
+  // image_transport::Subscriber image_subscriber_;
+  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
 };
 
 #endif  // MONONODE_HPP_
