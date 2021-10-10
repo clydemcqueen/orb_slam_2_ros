@@ -28,6 +28,7 @@
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
+#include <image_geometry/stereo_camera_model.h>
 #include <image_transport/image_transport.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.hpp>
@@ -57,11 +58,20 @@ public:
 
   void init();
 
+  void SideBySideCallback(sensor_msgs::msg::Image::SharedPtr msg);
+
   void ImageCallback(
     const sensor_msgs::msg::Image::ConstSharedPtr & msgLeft,
     const sensor_msgs::msg::Image::ConstSharedPtr & msgRight);
 
 private:
+  bool stereo_side_by_side_param_;
+  std::string left_info_url_param_;
+  std::string right_info_url_param_;
+  image_geometry::StereoCameraModel stereo_model_;
+
+  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr side_by_side_subscriber_;
+
   typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::msg::Image,
       sensor_msgs::msg::Image> sync_pol;
 
