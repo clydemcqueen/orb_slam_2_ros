@@ -47,7 +47,7 @@
 
 #include "tf2/convert.h"
 #include "tf2/LinearMath/Transform.h"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2_ros/buffer.h"
 #include "tf2_ros/message_filter.h"
 #include "tf2_ros/transform_broadcaster.h"
@@ -78,8 +78,6 @@ protected:
   ORB_SLAM2::System * orb_slam_;
   rclcpp::Time current_frame_time_;
   std::shared_ptr<image_transport::ImageTransport> image_transport_;
-
-  bool subscribe_best_effort_param_;
 
 private:
   void PublishMapPoints(std::vector<ORB_SLAM2::MapPoint *> map_points);
