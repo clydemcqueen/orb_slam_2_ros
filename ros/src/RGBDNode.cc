@@ -89,7 +89,8 @@ void RGBDNode::ImageCallback(
     return;
   }
 
-  current_frame_time_ = msgRGB->header.stamp;
+  // current_frame_time_ = msgRGB->header.stamp;
+  current_frame_time_ = now();
 
   rclcpp::Time msg_time = cv_ptrRGB->header.stamp;
   orb_slam_->TrackRGBD(cv_ptrRGB->image, cv_ptrD->image, msg_time.seconds());

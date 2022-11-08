@@ -91,7 +91,8 @@ void StereoNode::ImageCallback(
     return;
   }
 
-  current_frame_time_ = msgLeft->header.stamp;
+  // current_frame_time_ = msgLeft->header.stamp;
+  current_frame_time_ = now();
 
   rclcpp::Time msg_time = cv_ptrLeft->header.stamp;
   orb_slam_->TrackStereo(cv_ptrLeft->image, cv_ptrRight->image, msg_time.seconds());

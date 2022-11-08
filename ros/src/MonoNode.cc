@@ -71,7 +71,8 @@ void MonoNode::ImageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & msg
     return;
   }
 
-  current_frame_time_ = msg->header.stamp;
+  // current_frame_time_ = msg->header.stamp;
+  current_frame_time_ = now();
 
   rclcpp::Time msg_time = cv_in_ptr->header.stamp;
   orb_slam_->TrackMonocular(cv_in_ptr->image, msg_time.seconds());
