@@ -16,7 +16,7 @@ if(NOT CMAKE_CXX_STANDARD)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wno-aggressive-loop-optimizations)
 endif()
 
 find_package(ament_cmake REQUIRED)
@@ -126,7 +126,8 @@ target_link_libraries(${PROJECT_NAME}_mono
   ${OpenCV_LIBS}
 )
 
-rosidl_target_interfaces(${PROJECT_NAME}_mono ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+target_link_libraries(${PROJECT_NAME}_mono "${cpp_typesupport_target}")
 
 #Stereo
 add_executable (${PROJECT_NAME}_stereo
@@ -141,7 +142,8 @@ target_link_libraries(${PROJECT_NAME}_stereo
   ${OpenCV_LIBS}
 )
 
-rosidl_target_interfaces(${PROJECT_NAME}_stereo ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+target_link_libraries(${PROJECT_NAME}_stereo "${cpp_typesupport_target}")
 
 #RGBD
 add_executable(${PROJECT_NAME}_rgbd
@@ -156,7 +158,8 @@ target_link_libraries(${PROJECT_NAME}_rgbd
   ${OpenCV_LIBS}
 )
 
-rosidl_target_interfaces(${PROJECT_NAME}_rgbd ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+target_link_libraries(${PROJECT_NAME}_rgbd "${cpp_typesupport_target}")
 
 install(TARGETS ${PROJECT_NAME}_mono ${PROJECT_NAME}_stereo ${PROJECT_NAME}_rgbd
   RUNTIME DESTINATION lib/${PROJECT_NAME}
