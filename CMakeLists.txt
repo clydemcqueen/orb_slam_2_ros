@@ -33,12 +33,12 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(image_geometry REQUIRED)
 
 # ffmpeg libraries
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(PC_AVDEVICE REQUIRED libavdevice>=58)
-pkg_check_modules(PC_AVFORMAT REQUIRED libavformat>=58)
-pkg_check_modules(PC_AVCODEC REQUIRED libavcodec>=58)
-pkg_check_modules(PC_AVUTIL REQUIRED libavutil>=56)
-pkg_check_modules(PC_SWSCALE REQUIRED libswscale>=5)
+#find_package(PkgConfig REQUIRED)
+#pkg_check_modules(PC_AVDEVICE REQUIRED libavdevice>=58)
+#pkg_check_modules(PC_AVFORMAT REQUIRED libavformat>=58)
+#pkg_check_modules(PC_AVCODEC REQUIRED libavcodec>=58)
+#pkg_check_modules(PC_AVUTIL REQUIRED libavutil>=56)
+#pkg_check_modules(PC_SWSCALE REQUIRED libswscale>=5)
 
 set(dependencies
   rclcpp
