@@ -61,7 +61,7 @@ public:
 public:
 
     // Initialize the SLAM system. It launches the Local Mapping, Loop Closing and Viewer threads.
-    System(const string strVocFile, const eSensor sensor, ORBParameters& parameters,
+    System(const string strVocFile, const eSensor sensor, ORBParameters& parameters, float monoMapScale,
            const std::string & map_file = "", bool load_map = false); // map serialization addition
 
     // Process the given stereo frame. Images must be synchronized and rectified.

@@ -28,7 +28,7 @@
 namespace ORB_SLAM2
 {
 
-System::System(const string strVocFile, const eSensor sensor, ORBParameters& parameters,
+System::System(const string strVocFile, const eSensor sensor, ORBParameters& parameters, float monoMapScale,
                const std::string & map_file, bool load_map): // map serialization addition
                load_map(load_map), map_file(map_file), mSensor(sensor), mbReset(false),
                mbActivateLocalizationMode(false), mbDeactivateLocalizationMode(false)
@@ -99,7 +99,7 @@ System::System(const string strVocFile, const eSensor sensor, ORBParameters& par
     //Initialize the Tracking thread
     //(it will live in the main thread of execution, the one that called this constructor)
     mpTracker = new Tracking(this, mpVocabulary, mpFrameDrawer,
-                             mpMap, mpKeyFrameDatabase, mSensor, parameters);
+                             mpMap, mpKeyFrameDatabase, mSensor, parameters, monoMapScale);
 
     //Initialize the Local Mapping thread and launch
     mpLocalMapper = new LocalMapping(mpMap, mSensor==MONOCULAR);

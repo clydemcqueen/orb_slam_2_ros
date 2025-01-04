@@ -44,10 +44,10 @@ namespace ORB_SLAM2
 {
 
 Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
-        Map *pMap, KeyFrameDatabase* pKFDB, const int sensor, ORBParameters& parameters):
+        Map *pMap, KeyFrameDatabase* pKFDB, const int sensor, ORBParameters& parameters, float monoMapScale):
     mState(NO_IMAGES_YET), mSensor(sensor), mbOnlyTracking(false), mbVO(false), mnMinimumKeyFrames(5),
     mpORBVocabulary(pVoc), mpKeyFrameDB(pKFDB), mpInitializer(static_cast<Initializer*>(NULL)),
-    mpSystem(pSys), mpFrameDrawer(pFrameDrawer), mpMap(pMap), mnLastRelocFrameId(0)
+    mpSystem(pSys), mpFrameDrawer(pFrameDrawer), mpMap(pMap), mnLastRelocFrameId(0), mMonoMapScale(monoMapScale)
 {
     //Unpack all the parameters from the parameters struct (this replaces loading in a second configuration file)
     mMaxFrames = parameters.maxFrames;
@@ -666,9 +666,9 @@ void Tracking::CreateInitialMapMonocular()
 
     Optimizer::GlobalBundleAdjustemnt(mpMap,20);
 
-    // Set median depth to 1
+    // Set median depth to mMonoMapScale
     float medianDepth = pKFini->ComputeSceneMedianDepth(2);
-    float invMedianDepth = 1.0f/medianDepth;
+    float invMedianDepth = mMonoMapScale/medianDepth;
 
     if(medianDepth<0 || pKFcur->TrackedMapPoints(1)<100)
     {

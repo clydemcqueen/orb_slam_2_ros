@@ -125,6 +125,7 @@ private:
   bool publish_tf_param_;
   bool publish_pose_param_;
   int min_observations_per_point_;
+  float mono_map_scale_param_;
 };
 
 #endif  // NODE_HPP_

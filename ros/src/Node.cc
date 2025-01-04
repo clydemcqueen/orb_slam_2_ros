@@ -56,6 +56,9 @@ Node::Node(
   declare_parameter("ThDepth", rclcpp::ParameterValue(35.0f));
   declare_parameter("depth_map_factor", rclcpp::ParameterValue(1.0f));
   declare_parameter("camera_baseline", rclcpp::ParameterValue(0.0f));
+
+  // Externally-provided map scale for MonoNode
+  declare_parameter("mono_map_scale", rclcpp::ParameterValue(1.0f));
 }
 
 void Node::init(const ORB_SLAM2::System::eSensor & sensor)
@@ -69,6 +72,9 @@ void Node::init(const ORB_SLAM2::System::eSensor & sensor)
   get_parameter("map_file", map_file_name_param_);
   get_parameter("voc_file", voc_file_name_param_);
   get_parameter("load_map", load_map_param_);
+
+  // Externally-provided map scale for MonoNode
+  get_parameter("mono_map_scale", mono_map_scale_param_);
 
   sensor_ = sensor;
 
@@ -379,6 +385,7 @@ void Node::LoadOrbParameters(sensor_msgs::msg::CameraInfo::SharedPtr camera_info
       voc_file_name_param_,
       sensor_,
       parameters,
+      mono_map_scale_param_,
       map_file_name_param_,
       load_map_param_);
 
